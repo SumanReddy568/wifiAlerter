@@ -2,7 +2,7 @@ name: Wi-Fi Speed Monitor
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  
+    # - cron: "*/30 * * * *"  
   workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
