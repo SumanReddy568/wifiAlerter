@@ -2,7 +2,7 @@ name: Wi-Fi Speed Monitor
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # Runs every 30 minutes
+    - cron: "*/30 * * * *"  
   workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
@@ -16,22 +16,22 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # You can specify a minor version like '3.12'
+          python-version: '3.x' 
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Decrypt environment file
-        run: |
-          # Decrypt the environment file using the provided password from GitHub Secrets
-          python encrypt_decrypt_config.py d ${{ secrets.CONFIG_PASSWORD }}
+      # - name: Decrypt environment file
+      #   run: |
+      #     # Decrypt the environment file using the provided password from GitHub Secrets
+      #     python encrypt_decrypt_config.py d ${{ secrets.CONFIG_PASSWORD }
 
-      - name: Load decrypted environment variables
-        run: |
-          # Load the decrypted environment variables using dotenv
-          echo "Loading environment variables from the decrypted file."
-          # You might want to ensure the decrypted file path is correct based on your script
-          export $(grep -v '^#' config/encrypted_env.enc | xargs)
+      # - name: Load decrypted environment variables
+      #   run: |
+      #     # Load the decrypted environment variables using dotenv
+      #     echo "Loading environment variables from the decrypted file."
+      #     # You might want to ensure the decrypted file path is correct based on your script
+      #     export $(grep -v '^#' config/encrypted_env.enc | xargs)
 
       - name: Run speed test script
         run: python speedtest_check.py

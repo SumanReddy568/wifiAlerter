@@ -6,24 +6,24 @@ from dotenv import load_dotenv
 from encrypt_decrypt_config import decrypt_file
 
 # Function to safely get the password
-def get_password(prompt):
-    try:
-        return getpass(prompt)
-    except Exception as e:
-        print(f"Warning: {e}. Attempting to read password from an environment variable.")
-        # Optionally read from an environment variable or set a default
-        return os.getenv('DECRYPTION_PASSWORD', 'default_password')  # Change 'default_password' as needed
+# def get_password(prompt):
+#     try:
+#         return getpass(prompt)
+#     except Exception as e:
+#         print(f"Warning: {e}. Attempting to read password from an environment variable.")
+#         # Optionally read from an environment variable or set a default
+#         return os.getenv('DECRYPTION_PASSWORD', 'default_password')  # Change 'default_password' as needed
 
 # Decrypt environment variables before starting
-password = get_password("Enter decryption password: ")
-decrypt_file(password)
+# password = get_password("Enter decryption password: ")
+# decrypt_file(password)
 
 # Now load the decrypted environment variables
 load_dotenv("config/encrypted_env.enc")
 
 # Retrieve environment variables
 HOME_IP = '103.74.140.160'
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_TOKEN')
+TELEGRAM_BOT_TOKEN = '7830200237:AAF0RCojXgWJMgUENms9RwDb9xni6Ax4Mp4'
 CHAT_ID = 1271078205
 
 # Define constants
