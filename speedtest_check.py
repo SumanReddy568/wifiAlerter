@@ -3,7 +3,7 @@ import requests
 import os
 from getpass import getpass
 from cryptography.fernet import Fernet
-from wifiAlerter.encrypt_decrypt_config import decrypt_file
+from encrypt_decrypt_config import decrypt_file
 from dotenv import load_dotenv
 
 # Decrypt environment variables before starting
