@@ -3,7 +3,8 @@ name: Wi-Fi Speed Monitor
 on:
   schedule:
     - cron: "*/30 * * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
+
 jobs:
   speed-test:
     runs-on: ubuntu-latest
@@ -22,9 +23,7 @@ jobs:
 
       - name: Decrypt environment file
         run: |
-          echo "${{ secrets.CONFIG_PASSWORD }}" | python encrypt_decrypt_config.py d
-        env:
-          CONFIG_PASSWORD: ${{ secrets.CONFIG_PASSWORD }}
+          python encrypt_decrypt_config.py d ${{ secrets.CONFIG_PASSWORD }}
 
       - name: Run speed test script
         run: python speedtest_check.py

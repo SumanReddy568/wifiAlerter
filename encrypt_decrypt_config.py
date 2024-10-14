@@ -1,8 +1,8 @@
 import os
 from cryptography.fernet import Fernet
-from getpass import getpass
 import base64
 import hashlib
+import sys
 
 CONFIG_FILE = "config/.env"  # Path to your .env file
 ENCRYPTED_FILE = "config/encrypted_env.enc"  # Path to the encrypted file
@@ -57,8 +57,12 @@ def decrypt_file(password):
         raise e
 
 if __name__ == "__main__":
-    action = input("Do you want to (e)ncrypt or (d)ecrypt the config file? ")
-    password = getpass("Enter encryption password: ")
+    if len(sys.argv) != 3:
+        print("Usage: python encrypt_decrypt_config.py <e|d> <password>")
+        sys.exit(1)
+
+    action = sys.argv[1]
+    password = sys.argv[2]
 
     if action.lower() == 'e':
         encrypt_file(password)
