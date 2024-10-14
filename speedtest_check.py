@@ -1,13 +1,21 @@
-import speedtest
-import requests
 import os
+import requests
+import speedtest
 from getpass import getpass
-from cryptography.fernet import Fernet
-from encrypt_decrypt_config import decrypt_file
 from dotenv import load_dotenv
+from encrypt_decrypt_config import decrypt_file
+
+# Function to safely get the password
+def get_password(prompt):
+    try:
+        return getpass(prompt)
+    except Exception as e:
+        print(f"Warning: {e}. Attempting to read password from an environment variable.")
+        # Optionally read from an environment variable or set a default
+        return os.getenv('DECRYPTION_PASSWORD', 'default_password')  # Change 'default_password' as needed
 
 # Decrypt environment variables before starting
-password = getpass("Enter decryption password: ")
+password = get_password("Enter decryption password: ")
 decrypt_file(password)
 
 # Now load the decrypted environment variables
@@ -16,31 +24,41 @@ load_dotenv("config/encrypted_env.enc")
 # Retrieve environment variables
 HOME_IP = '103.74.140.160'
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_TOKEN')
-CHAT_ID=1271078205
-
+CHAT_ID = 1271078205
 
 # Define constants
 HOME_ISP = "Atri Networks And Media Pvt Ltd"
-DOWNLOAD_THRESHOLD = 80.0  
-UPLOAD_THRESHOLD = 80.0
+DOWNLOAD_THRESHOLD = 80.0  # in Mbps
+UPLOAD_THRESHOLD = 80.0    # in Mbps
 
 def get_current_ip_info():
     """Get the current public IP address and ISP information."""
-    response = requests.get("http://ip-api.com/json/")
-    ip_data = response.json()
-    return ip_data['query'], ip_data['isp']
+    try:
+        response = requests.get("http://ip-api.com/json/")
+        response.raise_for_status()  # Raise an error for bad responses
+        ip_data = response.json()
+        return ip_data['query'], ip_data['isp']
+    except Exception as e:
+        print(f"Error retrieving IP info: {e}")
+        return None, None
 
 def send_telegram_message(message):
     """Send a message to the Telegram chat via bot."""
     url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
     data = {'chat_id': CHAT_ID, 'text': message}
-    response = requests.post(url, data=data)
-    if response.status_code != 200:
-        raise Exception(f"Error sending message: {response.text}")
+    try:
+        response = requests.post(url, data=data)
+        response.raise_for_status()  # Raise an error for bad responses
+    except Exception as e:
+        print(f"Error sending message: {e}")
 
 def check_speed():
     """Check the internet speed (both download and upload) and send an alert if below threshold."""
     current_ip, current_isp = get_current_ip_info()
+
+    if current_ip is None or current_isp is None:
+        print("Failed to get current IP information. Exiting.")
+        return
 
     if current_ip != HOME_IP or current_isp != HOME_ISP:
         message = (f"⚠️ Not connected to home Wi-Fi. "
