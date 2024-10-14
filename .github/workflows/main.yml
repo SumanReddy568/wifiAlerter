@@ -23,7 +23,7 @@ jobs:
 
       - name: Decrypt environment file
         run: |
-          echo "${{ secrets.CONFIG_PASSWORD }}" | python config/encrypt_decrypt_config.py d
+          echo "${{ secrets.CONFIG_PASSWORD }}" | python encrypt_decrypt_config.py d
         env:
           CONFIG_PASSWORD: ${{ secrets.CONFIG_PASSWORD }}
 
